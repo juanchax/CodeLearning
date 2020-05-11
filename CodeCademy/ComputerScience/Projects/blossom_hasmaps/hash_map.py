@@ -3,7 +3,7 @@ from blossom_lib import flower_definitions
 
 class HashMap:
     def __init__(self, size):
-        self.array_size = array
+        self.array_size = size
         self.array = [LinkedList() for item in range(self.array_size)]
 
     def hash(self, key):
@@ -22,25 +22,23 @@ class HashMap:
         for item in list_at_array:
             if item[0] == key:
                 item[1] = value
+                return
 
-            list_at_array.insert(payload)
+        list_at_array.insert(payload)
 
     def retrieve(self, key):
-        hash_code = self.hash(key)
-        array_index = compress(retrieve_hash_code)
+        array_index = self.compress(self.hash(key))
         list_at_index = self.array[array_index]
 
         for item in list_at_index:
-            if item[0] == key:
+            if key == item[0]:
                 return item[1]
-            else:
-                return None
+        return None
 
 
-        if payload[0] == key:
-            return payload[1]
+blossom = HashMap(len(flower_definitions))
 
-        if payload[0] != key or payload is None:
-            return None
+for flower in flower_definitions:
+    blossom.assign(flower[0], flower[1])
 
-blossom = HashMap(flower_definitions.size())
+print(blossom.retrieve('daisy'))
