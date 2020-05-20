@@ -4,7 +4,7 @@ email_two = open("email_two.txt", "r").read()
 email_three = open("email_three.txt", "r").read()
 email_four = open("email_four.txt", "r").read()
 
-### SENSOR FUNCTIONS
+### SENSOR FUNCTIONS ###
 
 # takes a string of text to be removed from the input
 def censor_string(text, my_string):
@@ -12,19 +12,27 @@ def censor_string(text, my_string):
 
 # takes a list of strings to be removed from the input
 def censor_list(text, my_list):
-    #censored_text = ''
     for i in range(0, len(my_list)):
-        censored_lower = text.replace(my_list[i].lower(), 'XXXXXX')
-        censored_upper = censored_lower.replace(my_list[i].upper(), 'XXXXXX')
-        censored_text = censored_upper.replace(my_list[i].title(), 'XXXXXX')
+        censored_display = '' # write code to replace word with 'XXX' of same length
+        censored_lower = text.replace(my_list[i].lower(), 'XXXXXX') # <-- replace lower case
+        censored_upper = censored_lower.replace(my_list[i].upper(), 'XXXXXX') # <-- replace UPPER case
+        censored_text = censored_upper.replace(my_list[i].title(), 'XXXXXX') # <-- replace Title case
         text = censored_text
     return censored_text
 
 # takes a list of strings and censors after the 2nd occurrence
 def censor_list_negatives(text, my_list, negatives_list):
-    pass
+        for i in range(0, len(my_list)):
+            censored_display =
+            censored_lower = text.replace(my_list[i].lower(), 'XXXXXX') # <-- replace lower case
+            censored_upper = censored_lower.replace(my_list[i].upper(), 'XXXXXX') # <-- replace UPPER case
+            censored_text = censored_upper.replace(my_list[i].title(), 'XXXXXX') # <-- replace Title case
+            text = censored_text
 
-### ITEMS TO BE CENSORED
+        # use string.find() to get the index for each negative word
+        # build a list of indexes and then censor the words in list[1:] <-- IGNORES THE 1st OCCURRENCE!!
+
+### ITEMS TO BE CENSORED ###
 string_to_censor = 'learning algorithms'
 proprietary_terms = [
                     "she",
@@ -35,6 +43,31 @@ proprietary_terms = [
                     "her",
                     "herself"
                     ]
+negative_words = [
+                    "concerned",
+                    "behind",
+                    "danger",
+                    "dangerous",
+                    "alarming",
+                    "alarmed",
+                    "out of control",
+                    "help",
+                    "unhappy",
+                    "bad",
+                    "upset",
+                    "awful",
+                    "broken",
+                    "damage",
+                    "damaging",
+                    "dismal",
+                    "distressed",
+                    "distressed",
+                    "concerning",
+                    "horrible",
+                    "horribly",
+                    "questionable"
+                    ]
 
+### RUN THE CENSOR FUNCTIONS ###
 print(censor_string(email_one, string_to_censor))
 print(censor_list(email_two, proprietary_terms))
