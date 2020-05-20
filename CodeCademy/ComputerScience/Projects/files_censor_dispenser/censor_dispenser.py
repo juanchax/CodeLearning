@@ -6,28 +6,33 @@ email_four = open("email_four.txt", "r").read()
 
 ### SENSOR FUNCTIONS ###
 
+# takes a string input and returns a censored word of same length
+def word_censored(my_string):
+    censored_word = ''
+    for i in range(0, len(my_string)):
+        censored_word += 'X'
+    return censored_word
+
 # takes a string of text to be removed from the input
-def censor_string(text, my_string):
-    return text.replace(my_string,'XXXXXX')
+def censor_string(text_to_censor, string_to_censor):
+    censored_word = word_censored(string_to_censor)
+    return text_to_censor.replace(string_to_censor, censored_word)
 
 # takes a list of strings to be removed from the input
-def censor_list(text, my_list):
-    for i in range(0, len(my_list)):
-        censored_display = '' # write code to replace word with 'XXX' of same length
-        censored_lower = text.replace(my_list[i].lower(), 'XXXXXX') # <-- replace lower case
-        censored_upper = censored_lower.replace(my_list[i].upper(), 'XXXXXX') # <-- replace UPPER case
-        censored_text = censored_upper.replace(my_list[i].title(), 'XXXXXX') # <-- replace Title case
-        text = censored_text
+def censor_list(text_to_censor, list_to_censor):
+    for i in range(0, len(list_to_censor)):
+        censored_word = word_censored(list_to_censor[i])
+        censored_lower = text_to_censor.replace(list_to_censor[i].lower(), censored_word) # <-- replace lower case
+        censored_upper = censored_lower.replace(list_to_censor[i].upper(), censored_word) # <-- replace UPPER case
+        censored_text = censored_upper.replace(list_to_censor[i].title(), censored_word) # <-- replace Title case
+        text_to_censor = censored_text
     return censored_text
 
-# takes a list of strings and censors after the 2nd occurrence
-def censor_list_negatives(text, my_list, negatives_list):
-        for i in range(0, len(my_list)):
-            censored_display =
-            censored_lower = text.replace(my_list[i].lower(), 'XXXXXX') # <-- replace lower case
-            censored_upper = censored_lower.replace(my_list[i].upper(), 'XXXXXX') # <-- replace UPPER case
-            censored_text = censored_upper.replace(my_list[i].title(), 'XXXXXX') # <-- replace Title case
-            text = censored_text
+# takes a list of strings and removes from the 2nd occurrence onwards
+def censor_list_negatives(text_to_censor, list_to_censor, negatives_list):
+    censored_text = censor_list(list_to_censor)
+
+    return censored_text
 
         # use string.find() to get the index for each negative word
         # build a list of indexes and then censor the words in list[1:] <-- IGNORES THE 1st OCCURRENCE!!
