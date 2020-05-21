@@ -4,38 +4,73 @@ email_two = open("email_two.txt", "r").read()
 email_three = open("email_three.txt", "r").read()
 email_four = open("email_four.txt", "r").read()
 
-### SENSOR FUNCTIONS ###
-
+### STRING BUILDER FUNCTIONS ###
 # takes a string input and returns a censored word of same length
-def word_censored(my_string):
-    censored_word = ''
-    for i in range(0, len(my_string)):
-        censored_word += 'X'
-    return censored_word
+def build_censor_string(string_to_censor):
+    censored_string = ''
+    for i in range(0, len(string_to_censor)):
+        censored_string += 'X'
+    return censored_string
 
+def build_string_location_dict(input_string, lookup_list):
+    string_location_dict = {}
+    lookup_string_count = 0
+    lookup_string_count_dict = {}
+
+    # check how to add funtionality if 'string'.count() > 1
+    for string in lookup_list:
+        if input_string.count(string) > 0:
+            string_location_dict[input_string.find(string)] = string
+            lookup_string_count += input_string.count(string)
+            lookup_string_count_dict[string] = input_string.count(string)
+
+    # sort the dict to remove the 1st occurrence of negative_words
+    final_dict = {}
+    for i in sorted (string_location_dict):
+        final_dict[i] = string_location_dict[i]
+
+    # remove the first occurrence a.k.a. first key in final_dict if it's found more than once
+    if lookup_string_count_dict[list(final_dict.values())[0]] > 1:
+        run_count = 1
+        return final_dict, lookup_string_count, run_count
+    # return the FULL dictionary of negative words found, use the 1st INDEX to not include in censoring
+    else:
+        run_count = 0
+        del final_dict[list(final_dict.keys())[0]]
+        return final_dict, lookup_string_count, run_count
+
+### SENSOR FUNCTIONS ###
 # takes a string of text to be removed from the input
-def censor_string(text_to_censor, string_to_censor):
-    censored_word = word_censored(string_to_censor)
-    return text_to_censor.replace(string_to_censor, censored_word)
+def censor_string(input_to_censor, string_to_censor):
+    censored_string = build_censor_string(string_to_censor)
+    return input_to_censor.replace(string_to_censor, censored_string)
 
 # takes a list of strings to be removed from the input
-def censor_list(text_to_censor, list_to_censor):
+def censor_list(input_to_censor, list_to_censor):
     for i in range(0, len(list_to_censor)):
-        censored_word = word_censored(list_to_censor[i])
-        censored_lower = text_to_censor.replace(list_to_censor[i].lower(), censored_word) # <-- replace lower case
-        censored_upper = censored_lower.replace(list_to_censor[i].upper(), censored_word) # <-- replace UPPER case
-        censored_text = censored_upper.replace(list_to_censor[i].title(), censored_word) # <-- replace Title case
-        text_to_censor = censored_text
-    return censored_text
+        censored_item = build_censor_string(list_to_censor[i])
+        censored_lower = input_to_censor.replace(list_to_censor[i].lower(), censored_item) # <-- replace lower case
+        censored_upper = censored_lower.replace(list_to_censor[i].upper(), censored_item) # <-- replace UPPER case
+        censored_string = censored_upper.replace(list_to_censor[i].title(), censored_item) # <-- replace Title case
+        input_to_censor = censored_string
+    return censored_string
 
 # takes a list of strings and removes from the 2nd occurrence onwards
-def censor_list_negatives(text_to_censor, list_to_censor, negatives_list):
-    censored_text = censor_list(list_to_censor)
-
-    return censored_text
-
-        # use string.find() to get the index for each negative word
-        # build a list of indexes and then censor the words in list[1:] <-- IGNORES THE 1st OCCURRENCE!!
+def censor_list_negatives(input_to_censor, list_to_censor, negatives_list):
+    censored_string = censor_list(input_to_censor, list_to_censor)
+    #print(censored_string)
+    negatives_location, negatives_count, count = build_string_location_dict(censored_string, negatives_list)
+    if count > 0:
+        # censor AFTER the 1st time the first negative_word in the text
+        idx_to_censor = list(negatives_location.keys())[0] + len(list(negatives_location.values())[0])
+        # final list to censor
+        negatives_list_to_censor = list(negatives_location.values())
+        # concatenate substrings including the 1st negative word and the rest of the string processed
+        final_censored_string = censored_string[:idx_to_censor] + censor_list(censored_string[idx_to_censor:], negatives_list_to_censor)
+        return final_censored_string
+    else:
+        negatives_list_to_censor = list(negatives_location.values())
+        return censor_list(censored_string, negatives_list_to_censor)
 
 ### ITEMS TO BE CENSORED ###
 string_to_censor = 'learning algorithms'
@@ -66,13 +101,14 @@ negative_words = [
                     "damaging",
                     "dismal",
                     "distressed",
-                    "distressed",
+                    "distressing",
                     "concerning",
                     "horrible",
                     "horribly",
                     "questionable"
                     ]
 
-### RUN THE CENSOR FUNCTIONS ###
-print(censor_string(email_one, string_to_censor))
-print(censor_list(email_two, proprietary_terms))
+### TEST THE CENSOR FUNCTIONS ### uncomment the tests below to see output
+#print(censor_string(email_one, string_to_censor))
+#print(censor_list(email_two, proprietary_terms))
+#print(censor_list_negatives(email_three, proprietary_terms, negative_words))
