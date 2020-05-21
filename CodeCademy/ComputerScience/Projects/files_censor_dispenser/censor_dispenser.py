@@ -89,7 +89,7 @@ def censor_list_negatives(input_to_censor, list_to_censor, negatives_list):
 def censor_list_and_surrounding_words(input_to_censor, list_to_censor, negatives_list):
     # build NEW negative AND proprietary lists that replace EACH ORIGINAL STRING with the --> WORD_BEFORE + ORIGINAL_STRING + WORD_AFTER
     new_list_to_censor = build_robust_censor_list(input_to_censor, list_to_censor) + build_robust_censor_list(input_to_censor, negatives_list)
-    # 2) call censor_list() with newly created list
+    # call censor_list() with newly created list
     return (censor_list(input_to_censor, new_list_to_censor))
 
 
@@ -132,5 +132,5 @@ negative_words = [
 ### TEST THE CENSOR FUNCTIONS ### uncomment the tests below to see output
 #print(censor_string(email_one, string_to_censor))
 #print(censor_list(email_two, proprietary_terms))
-#print(censor_list_negatives(email_three, proprietary_terms, negative_words))
+print(censor_list_negatives(email_three, proprietary_terms, negative_words))
 #print(censor_list_and_surrounding_words(email_four, proprietary_terms, negative_words))
