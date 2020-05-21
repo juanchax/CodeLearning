@@ -12,12 +12,12 @@ def build_censor_string(string_to_censor):
         censored_string += 'X'
     return censored_string
 
+# takes a string input and returns:
 def build_string_location_dict(input_string, lookup_list):
     string_location_dict = {}
     lookup_string_count = 0
     lookup_string_count_dict = {}
 
-    # check how to add funtionality if 'string'.count() > 1
     for string in lookup_list:
         if input_string.count(string) > 0:
             string_location_dict[input_string.find(string)] = string
@@ -38,6 +38,19 @@ def build_string_location_dict(input_string, lookup_list):
         run_count = 0
         del final_dict[list(final_dict.keys())[0]]
         return final_dict, lookup_string_count, run_count
+
+# takes an input string and a list, returns a list for each string_in_list found in input_string
+# PLUS the word before and the word after
+def build_robust_censor_list(input_to_censor, list_to_censor):
+    new_list_to_censor = []
+    input_string_list = input_to_censor.split()
+    for string in list_to_censor:
+        # find all occurrences of current string_to_censor
+        new_list_index = [index for index, value in enumerate(input_string_list) if value == string]
+        # iterate over the occurrences of each list_to_censor
+        for i in new_list_index:
+            new_list_to_censor.append(input_string_list[i - 1] + ' ' + input_string_list[i] + ' ' + input_string_list[i + 1])
+    return new_list_to_censor
 
 ### SENSOR FUNCTIONS ###
 # takes a string of text to be removed from the input
@@ -71,6 +84,14 @@ def censor_list_negatives(input_to_censor, list_to_censor, negatives_list):
     else:
         negatives_list_to_censor = list(negatives_location.values())
         return censor_list(censored_string, negatives_list_to_censor)
+
+# takes a list of strings and removes from the 2nd occurrence onwards, INCLUDING (1) surrounding word as well
+def censor_list_and_surrounding_words(input_to_censor, list_to_censor, negatives_list):
+    # build NEW negative AND proprietary lists that replace EACH ORIGINAL STRING with the --> WORD_BEFORE + ORIGINAL_STRING + WORD_AFTER
+    new_list_to_censor = build_robust_censor_list(input_to_censor, list_to_censor) + build_robust_censor_list(input_to_censor, negatives_list)
+    # 2) call censor_list() with newly created list
+    return (censor_list(input_to_censor, new_list_to_censor))
+
 
 ### ITEMS TO BE CENSORED ###
 string_to_censor = 'learning algorithms'
@@ -112,3 +133,4 @@ negative_words = [
 #print(censor_string(email_one, string_to_censor))
 #print(censor_list(email_two, proprietary_terms))
 #print(censor_list_negatives(email_three, proprietary_terms, negative_words))
+#print(censor_list_and_surrounding_words(email_four, proprietary_terms, negative_words))
