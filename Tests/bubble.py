@@ -1,14 +1,20 @@
-ou’ve learned a bunch about graph searches and how to use them effectively:
+In the worst case, we would look at all of the edges in the direction of the goal vertex until we reach the goal vertex. We would look at b edges for every vertex in our search for close to d iterations. Thus, the runtime is O(bd).
 
-You can use a graph search algorithm to traverse the entirety of a graph data structure to locate a specific value
 
-Vertices in a graph search include a “visited” list to keep track of whether or not each vertex has been checked
-Depth-first search (DFS) and breadth-first search (BFS) are two common approaches to graph search
+A* ALGORITHM: CONCEPTUAL
+Review of A*
 
-The runtime for graph search algorithms is O(vertices + edges)
+The A* algorithm is a greedy graph search algorithm that optimizes looking for a target vertex.
+A* is a modification of Dijkstra’s done by adding the estimated distance of each vertex to the goal vertex when searching.
 
-DFS, which employs either recursion or a stack data structure, is useful for determining whether a path exists between two points
+We can modify Dijkstra’s and turn it into A* by changing the following:
 
-BFS, which generally relies on a queue data structure, is helpful in finding the shortest path between two points
+Adding a target for the search.
 
-There are three common traversal orders which you can apply with DFS to generate a list of all values in a graph: pre-order, post-order, and reverse post-order
+Gathering possible optimal paths and identify a single shortest path.
+
+Implementing a heuristic that determines the likely distance remaining.
+
+The runtime of A* is O(bd) where b is the branching factor of the graph and d is the depth of the goal vertex from the start vertex.
+
+A* is an introductory glimpse into artificial intelligence.
